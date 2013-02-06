@@ -1,0 +1,11 @@
+{% load i18n %}
+<form method="post" action=".">
+    {% csrf_token %}
+    {{ enquiry.question }}
+    <select>
+        {% for answer in enquiry.get_answers %}
+            <option value="{{ answer.pk }}">{{ answer }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="{% trans "Vote!" %}" />
+</form>

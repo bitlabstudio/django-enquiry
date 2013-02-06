@@ -53,7 +53,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'simple_translation.middleware.MultilingualGenericsMiddleware'
+    'simple_translation.middleware.MultilingualGenericsMiddleware',
 ]
 
 EXTERNAL_APPS = [

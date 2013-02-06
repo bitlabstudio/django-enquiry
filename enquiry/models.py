@@ -1,6 +1,7 @@
 """Models for the ``enquiry`` app."""
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import get_language
 from django.utils.translation import ugettext_lazy as _
 
@@ -11,7 +12,15 @@ class TransModelMixin(object):
     """Mixin that returns the translation object for a given parent model."""
     def get_translation(self):
         lang = get_language()
-        return get_translation_queryset(self).filter(language=lang)[0]
+        queryset = get_translation_queryset(self).filter(language=lang)
+        if queryset:
+            return queryset[0]
+        # If there's no translation available in the current language
+        queryset = get_translation_queryset(self)
+        if queryset:
+            return queryset[0]
+        # If there's no translation available at all
+        return None
 
 
 class Enquiry(TransModelMixin, models.Model):
@@ -28,8 +37,37 @@ class Enquiry(TransModelMixin, models.Model):
       users must be authenticated in order to vote.
 
     """
+    creation_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Creation Date'),
+    )
+
+    created_by = models.ForeignKey(
+        'auth.User',
+        verbose_name=_('Created by'),
+        related_name='enquiries',
+    )
+
+    start_date = models.DateTimeField(
+        default=timezone.now(),
+        verbose_name=_('Start'),
+    )
+
+    end_date = models.DateTimeField(
+        default=timezone.now() + timezone.timedelta(days=7),
+        verbose_name=_('End'),
+    )
+
+    allow_anonymous = models.BooleanField(
+        default=False,
+        verbose_name=_('Allow anonymous votes'),
+    )
+
     def __unicode__(self):
-        return self.get_translation().question
+        translation = self.get_translation()
+        if translation:
+            return translation.question
+        return 'not translated'
 
 
 class EnquiryTrans(models.Model):
@@ -39,13 +77,25 @@ class EnquiryTrans(models.Model):
     :question: The title of this category.
 
     """
+    question = models.CharField(
+        max_length=100,
+        verbose_name=_('Question'),
+    )
+
     # Needed by simple-translation
     enquiry = models.ForeignKey(Enquiry, verbose_name=_('Enquiry'))
     language = models.CharField(
         max_length=2, verbose_name=_('Language'), choices=settings.LANGUAGES)
 
+    def __unicode__(self):
+        return self.question
 
-class Answer(models.Model):
+    def get_answers(self):
+        """Returns a queryset of all answers to its question."""
+        return [answer for answer in self.enquiry.answers.all()]
+
+
+class Answer(TransModelMixin, models.Model):
     """
     An answer belongs to an enquiry.
 
@@ -54,14 +104,21 @@ class Answer(models.Model):
     :enquiry: FK to the enquiry this answer belongs to.
 
     """
-    pass
+    enquiry = models.ForeignKey(
+        'enquiry.Enquiry',
+        verbose_name=_('Enquiry'),
+        related_name='answers',
+    )
 
     def __unicode__(self):
-        return self.get_translation().text
+        translation = self.get_translation()
+        if translation:
+            return translation.text
+        return 'not translated'
 
     def get_vote_count(self):
         """Returns the number of votes for this answer."""
-        pass
+        return self.votes.all().count()
 
 
 class AnswerTrans(models.Model):
@@ -71,10 +128,18 @@ class AnswerTrans(models.Model):
     :text: The text of this answer.
 
     """
+    text = models.CharField(
+        max_length=100,
+        verbose_name=_('Answer'),
+    )
+
     # Needed by simple-translation
     answer = models.ForeignKey(Answer, verbose_name=_('Answer'))
     language = models.CharField(
         max_length=2, verbose_name=_('Language'), choices=settings.LANGUAGES)
+
+    def __unicode__(self):
+        return '{0} - {1}'.format(self.answer.enquiry, self.text)
 
 
 class Vote(models.Model):
@@ -94,4 +159,17 @@ class Vote(models.Model):
     with the FAQ app, please come up with a good idea.
 
     """
-    pass
+    answer = models.ForeignKey(
+        'enquiry.Answer',
+        verbose_name=_('Answer'),
+        related_name='votes',
+    )
+
+    user = models.ForeignKey(
+        'auth.User',
+        verbose_name=_('User'),
+        related_name='votes',
+    )
+
+    def __unicode__(self):
+        return self.answer
