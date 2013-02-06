@@ -1,5 +1,7 @@
 === ongoing ===
 
+Created models, views, urls and forms.
+
 === 0.1 ===
 
 Initial commit

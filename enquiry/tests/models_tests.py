@@ -12,6 +12,8 @@ from enquiry.tests.factories import (
 
 class EnquiryTestCase(TestCase):
     """Tests for the ``Enquiry`` model class."""
+    longMessage = True
+
     def setUp(self):
         self.obj = EnquiryFactory()
 
@@ -28,6 +30,8 @@ class EnquiryTestCase(TestCase):
 
 class AnswerTestCase(TestCase):
     """Tests for the ``Answer`` model class."""
+    longMessage = True
+
     def setUp(self):
         self.obj = AnswerFactory()
 
@@ -42,6 +46,8 @@ class AnswerTestCase(TestCase):
 
 class VoteTestCase(TestCase):
     """Tests for the ``Vote`` model class."""
+    longMessage = True
+
     def test_model(self):
         obj = VoteFactory()
         self.assertTrue(obj.pk)

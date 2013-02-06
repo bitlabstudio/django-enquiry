@@ -1,11 +1,18 @@
 {% load i18n %}
-<form method="post" action=".">
-    {% csrf_token %}
-    {{ enquiry.question }}
-    <select>
-        {% for answer in enquiry.get_answers %}
-            <option value="{{ answer.pk }}">{{ answer }}</option>
-        {% endfor %}
-    </select>
-    <input type="submit" value="{% trans "Vote!" %}" />
-</form>
+{% load url from future %}
+{% if enquiry_translated %}
+    <form method="post" action="{% url "enquiry_vote" enquiry_pk=enquiry_translated.enquiry.pk %}">
+        {% csrf_token %}
+        {{ enquiry_translated.question }}
+        <select name="answer">
+            {% for answery_translated in enquiry_translated.get_answers %}
+                <option value="{{ answery_translated.answer.pk }}">{{ answery_translated }}</option>
+            {% endfor %}
+        </select>
+        {% if request.user.is_authenticated or enquiry_translated.enquiry.allow_anonymous %}
+            <input type="submit" value="{% trans "Post it!" %}" />
+        {% else %}
+            <p>{% trans "Please login to vote." %}</p>
+        {% endif %}
+    </form>
+{% endif %}

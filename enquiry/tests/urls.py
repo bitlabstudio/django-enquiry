@@ -19,6 +19,6 @@ urlpatterns += staticfiles_urlpatterns()
 urlpatterns += patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
-    # url(r'^enquiries/', include('enquiry.urls')),
-    url(r'^', TemplateView.as_view(template_name='enquiry/test_base.html')),
+    url(r'^enquiries/', include('enquiry.urls')),
+    url(r'^', TemplateView.as_view(template_name='base.html')),
 )

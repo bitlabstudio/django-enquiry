@@ -92,7 +92,8 @@ class EnquiryTrans(models.Model):
 
     def get_answers(self):
         """Returns a queryset of all answers to its question."""
-        return [answer for answer in self.enquiry.answers.all()]
+        return [answer.get_translation() for answer
+                in self.enquiry.answers.all() if answer.get_translation()]
 
 
 class Answer(TransModelMixin, models.Model):
@@ -139,7 +140,7 @@ class AnswerTrans(models.Model):
         max_length=2, verbose_name=_('Language'), choices=settings.LANGUAGES)
 
     def __unicode__(self):
-        return '{0} - {1}'.format(self.answer.enquiry, self.text)
+        return self.text
 
 
 class Vote(models.Model):
@@ -148,15 +149,7 @@ class Vote(models.Model):
 
     :answer: The answer this user has chosen.
     :user: The user who cast this vote. Can be None if the user was anonymous.
-
-    We also need to save something to identify anonymous users here. IP might
-    not be a good idea because those students might all access the portal
-    from within the campus and have the same IP.
-
-    Maybe we are saving sessions in the database and we could save the session
-    PK here? But we are cleaning up the sessions regularily, so then the
-    PKs in this field would no longer be valid. Can't remember how we did this
-    with the FAQ app, please come up with a good idea.
+    :session_key: Stores the current session key if vote has been anonymous.
 
     """
     answer = models.ForeignKey(
@@ -169,6 +162,13 @@ class Vote(models.Model):
         'auth.User',
         verbose_name=_('User'),
         related_name='votes',
+        blank=True, null=True,
+    )
+
+    session_key = models.CharField(
+        max_length=100,
+        verbose_name=_('User'),
+        blank=True,
     )
 
     def __unicode__(self):
