@@ -15,6 +15,8 @@ def render_current_poll(context):
     if enquiries:
         translation = enquiries[0].get_translation()
         return template.loader.render_to_string(
-            'enquiry/current_poll.html', {'enquiry_translated': translation},
+            'enquiry/current_poll.html',
+            {'enquiry_translated': translation,
+             'has_voted': enquiries[0].has_voted(context['request'])},
             context)
     return ''

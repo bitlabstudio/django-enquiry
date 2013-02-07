@@ -42,8 +42,7 @@ class VoteSubmitView(CreateView):
         kwargs = super(VoteSubmitView, self).get_form_kwargs(**kwargs)
         if self.request.user.is_authenticated():
             kwargs.update({'user': self.request.user})
-        else:
-            kwargs.update({'session_key': self.request.session.session_key})
+        kwargs.update({'session_key': self.request.session.session_key})
         return kwargs
 
     def get_success_url(self):
@@ -57,23 +56,13 @@ class EnquiryDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         self.kwargs = kwargs
         self.object = self.get_object()
-        answer_pks = [answer_translated.answer.pk for answer_translated
-                      in self.object.get_translation().get_answers()]
-        if self.object.allow_anonymous:
-            try:
-                Vote.objects.get(session_key=request.session.session_key,
-                                 answer__pk__in=answer_pks)
-            except Vote.DoesNotExist:
-                raise Http404
-        elif not request.user.is_authenticated():
+        if (not self.object.allow_anonymous
+                and not request.user.is_authenticated()):
             raise Http404
-        else:
-            try:
-                Vote.objects.get(user=request.user, answer__pk__in=answer_pks)
-            except Vote.DoesNotExist:
-                raise Http404
-        return super(EnquiryDetailView, self).dispatch(request, *args,
-                                                       **kwargs)
+        if self.object.has_voted(request):
+            return super(EnquiryDetailView, self).dispatch(request, *args,
+                                                           **kwargs)
+        raise Http404
 
     def get_context_data(self, **kwargs):
         context = super(EnquiryDetailView, self).get_context_data(**kwargs)

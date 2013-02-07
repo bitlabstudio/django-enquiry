@@ -69,6 +69,22 @@ class Enquiry(TransModelMixin, models.Model):
             return translation.question
         return 'not translated'
 
+    def has_voted(self, request):
+        """Returns True if the current User has already voted."""
+        answer_pks = [answer.pk for answer in self.answers.all()
+                      if answer.get_translation()]
+        if request.user.is_authenticated():
+            votes = Vote.objects.filter(
+                models.Q(session_key=request.session.session_key) | models.Q(
+                    user=request.user), answer__pk__in=answer_pks)
+        else:
+            votes = Vote.objects.filter(
+                session_key=request.session.session_key,
+                answer__pk__in=answer_pks)
+        if votes:
+            return True
+        return False
+
 
 class EnquiryTrans(models.Model):
     """
@@ -172,4 +188,4 @@ class Vote(models.Model):
     )
 
     def __unicode__(self):
-        return self.answer
+        return '{0}'.format(self.answer)

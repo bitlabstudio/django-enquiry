@@ -4,15 +4,23 @@
     <form method="post" action="{% url "enquiry_vote" enquiry_pk=enquiry_translated.enquiry.pk %}">
         {% csrf_token %}
         {{ enquiry_translated.question }}
-        <select name="answer">
-            {% for answery_translated in enquiry_translated.get_answers %}
-                <option value="{{ answery_translated.answer.pk }}">{{ answery_translated }}</option>
-            {% endfor %}
-        </select>
-        {% if request.user.is_authenticated or enquiry_translated.enquiry.allow_anonymous %}
-            <input type="submit" value="{% trans "Post it!" %}" />
+        {% if has_voted %}
+            <ul>
+                {% for answer_translated in enquiry_translated.get_answers %}
+                    <li>{{ answer_translated }} {{ answer_translated.answer.get_vote_count }} {% trans "votes" %}</li>
+                {% endfor %}
+            </ul>
         {% else %}
-            <p>{% trans "Please login to vote." %}</p>
+            <select name="answer">
+                {% for answery_translated in enquiry_translated.get_answers %}
+                    <option value="{{ answery_translated.answer.pk }}">{{ answery_translated }}</option>
+                {% endfor %}
+            </select>
+            {% if request.user.is_authenticated or enquiry_translated.enquiry.allow_anonymous %}
+                <input type="submit" value="{% trans "Post it!" %}" />
+            {% else %}
+                <p>{% trans "Please login to vote." %}</p>
+            {% endif %}
         {% endif %}
     </form>
 {% endif %}

@@ -1,71 +1,71 @@
 [
     {
-        "pk": 1, 
-        "model": "enquiry.enquiry", 
+        "pk": 1,
+        "model": "enquiry.enquiry",
         "fields": {
-            "allow_anonymous": false, 
-            "end_date": "2013-02-13T06:36:09", 
-            "start_date": "2013-02-06T06:36:09", 
+            "allow_anonymous": true,
+            "end_date": "2013-02-13T06:36:09",
+            "start_date": "2013-02-06T06:36:09",
             "created_by": [
                 "admin"
-            ], 
+            ],
             "creation_date": "2013-02-06T06:37:19.364"
         }
-    }, 
+    },
     {
-        "pk": 1, 
-        "model": "enquiry.enquirytrans", 
+        "pk": 1,
+        "model": "enquiry.enquirytrans",
         "fields": {
-            "enquiry": 1, 
-            "question": "Can you ever reach Level 9000?", 
+            "enquiry": 1,
+            "question": "Can you ever reach Level 9000?",
             "language": "en"
         }
-    }, 
+    },
     {
-        "pk": 1, 
-        "model": "enquiry.answer", 
+        "pk": 1,
+        "model": "enquiry.answer",
         "fields": {
             "enquiry": 1
         }
-    }, 
+    },
     {
-        "pk": 2, 
-        "model": "enquiry.answer", 
+        "pk": 2,
+        "model": "enquiry.answer",
         "fields": {
             "enquiry": 1
         }
-    }, 
+    },
     {
-        "pk": 3, 
-        "model": "enquiry.answer", 
+        "pk": 3,
+        "model": "enquiry.answer",
         "fields": {
             "enquiry": 1
         }
-    }, 
+    },
     {
-        "pk": 1, 
-        "model": "enquiry.answertrans", 
+        "pk": 1,
+        "model": "enquiry.answertrans",
         "fields": {
-            "answer": 1, 
-            "text": "That's what you think, Captain Cocky!", 
+            "answer": 1,
+            "text": "That's what you think, Captain Cocky!",
             "language": "en"
         }
-    }, 
+    },
     {
-        "pk": 2, 
-        "model": "enquiry.answertrans", 
+        "pk": 2,
+        "model": "enquiry.answertrans",
         "fields": {
-            "answer": 2, 
-            "text": "You should know, I'm much more powerful than my father. ", 
+            "answer": 2,
+            "text": "You should know, I'm much more powerful than my father. ",
             "language": "en"
         }
-    }, 
+    },
     {
-        "pk": 3, 
-        "model": "enquiry.answertrans", 
+        "pk": 3,
+        "model": "enquiry.answertrans",
         "fields": {
-            "answer": 3, 
-            "text": "Fool! Never believe anything the enemy tells you! ", 
+            "answer": 3,
+            "text": "Fool! Never believe anything the enemy tells you! ",
             "language": "en"
         }
     }
