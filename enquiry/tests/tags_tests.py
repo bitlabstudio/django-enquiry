@@ -30,6 +30,10 @@ class RenderCurrentPollTestCase(TestCase):
 
         # Returns current_poll.html
         self.vote = VoteFactory()
-        EnquiryTransENFactory(enquiry=self.vote.answer.enquiry)
+        enquiry_translated = EnquiryTransENFactory(
+            enquiry=self.vote.answer.enquiry)
         AnswerTransENFactory(answer=self.vote.answer)
-        self.assertIn('<option value="1">', render_current_poll(context))
+        self.assertEqual(render_current_poll(context), {
+            'has_voted': False,
+            'enquiry_translated': enquiry_translated,
+        })

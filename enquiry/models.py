@@ -49,13 +49,14 @@ class Enquiry(TransModelMixin, models.Model):
     )
 
     start_date = models.DateTimeField(
-        default=timezone.now(),
+        default=lambda: timezone.now(),
         verbose_name=_('Start'),
     )
 
     end_date = models.DateTimeField(
-        default=timezone.now() + timezone.timedelta(days=7),
+        default=lambda: timezone.now() + timezone.timedelta(days=7),
         verbose_name=_('End'),
+        blank=True, null=True,
     )
 
     allow_anonymous = models.BooleanField(
@@ -68,6 +69,11 @@ class Enquiry(TransModelMixin, models.Model):
         if translation:
             return translation.question
         return 'not translated'
+
+    def get_answers(self):
+        """Returns a queryset of all answers to its question."""
+        return [answer.get_translation() for answer
+                in self.answers.all() if answer.get_translation()]
 
     def has_voted(self, request):
         """Returns True if the current User has already voted."""
@@ -105,11 +111,6 @@ class EnquiryTrans(models.Model):
 
     def __unicode__(self):
         return self.question
-
-    def get_answers(self):
-        """Returns a queryset of all answers to its question."""
-        return [answer.get_translation() for answer
-                in self.enquiry.answers.all() if answer.get_translation()]
 
 
 class Answer(TransModelMixin, models.Model):

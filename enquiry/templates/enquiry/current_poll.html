@@ -6,13 +6,13 @@
         {{ enquiry_translated.question }}
         {% if has_voted %}
             <ul>
-                {% for answer_translated in enquiry_translated.get_answers %}
+                {% for answer_translated in enquiry_translated.enquiry.get_answers %}
                     <li>{{ answer_translated }} {{ answer_translated.answer.get_vote_count }} {% trans "votes" %}</li>
                 {% endfor %}
             </ul>
         {% else %}
             <select name="answer">
-                {% for answery_translated in enquiry_translated.get_answers %}
+                {% for answery_translated in enquiry_translated.enquiry.get_answers %}
                     <option value="{{ answery_translated.answer.pk }}">{{ answery_translated }}</option>
                 {% endfor %}
             </select>

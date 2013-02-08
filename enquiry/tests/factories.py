@@ -28,13 +28,13 @@ class EnquiryTransFactoryBase(factory.Factory):
 class EnquiryTransENFactory(EnquiryTransFactoryBase):
     """Factory for english ``EnquiryTrans`` objects."""
     question = 'A question?'
-    language = 'en-us'
+    language = 'en'
 
 
 class EnquiryTransDEFactory(EnquiryTransFactoryBase):
     """Factory for german ``EnquiryTrans`` objects."""
     question = 'Eine Frage?'
-    language = 'de-de'
+    language = 'de'
 
 
 class AnswerFactory(factory.Factory):
