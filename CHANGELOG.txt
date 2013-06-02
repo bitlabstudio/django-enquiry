@@ -1,5 +1,7 @@
 === ongoing ===
 
+- fixed MANIFEST.in
+
 === 0.2 ===
 
 - added two new fields to EnquiryTranslation model: description and extra_info
