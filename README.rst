@@ -1,8 +1,6 @@
 Django Enquiry 
 ==============
 
-EARLY ALPHA! DO NOT USE THIS!
-
 A reusable Django app to host multilingual polls on your site.
 
 
@@ -43,6 +41,16 @@ on your site::
 
 If you want to customize the ouput of this tag, please override the
 `enquiry/current_poll.html` template.
+
+get_current_poll
+++++++++++++++++
+
+This assignment tag allows you to get the current poll and render it however
+you like it::
+
+    {% load enquiry_tags %}
+    {% get_current_poll as poll %}
+    <h1>{{ poll.get_translation.question }}</h1>
 
 
 Contribute

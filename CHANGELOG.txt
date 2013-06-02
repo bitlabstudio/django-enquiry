@@ -1,5 +1,8 @@
 === ongoing ===
 
+- added two new fields to EnquiryTranslation model: description and extra_info
+- added assignment tag `get_current_poll`
+
 Created models, views, urls and forms.
 
 === 0.1 ===

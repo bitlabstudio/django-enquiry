@@ -97,11 +97,23 @@ class EnquiryTrans(models.Model):
     Translateable fields for the ``Enquiry`` model.
 
     :question: The title of this category.
+    :description: Additional text to describe the purpose of the poll
+    :extra_info: Additional text that can be used for anything.
 
     """
     question = models.CharField(
         max_length=100,
         verbose_name=_('Question'),
+    )
+
+    description = models.TextField(
+        verbose_name=_('Description'),
+        blank=True,
+    )
+
+    extra_info = models.TextField(
+        verbose_name=_('Extra info'),
+        blank=True,
     )
 
     # Needed by simple-translation
