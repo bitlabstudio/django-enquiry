@@ -1,16 +1,18 @@
 """URLs for the ``event_rsvp`` app."""
 from django.conf.urls.defaults import patterns, url
+from django.views.generic import ListView
 
-from enquiry.views import EnquiryDetailView, VoteSubmitView
+from .models import Enquiry
+from .views import EnquirySubmitView
 
 
 urlpatterns = patterns(
     '',
-    url(r'^(?P<enquiry_pk>\d+)/$',
-        VoteSubmitView.as_view(),
-        name='enquiry_vote'),
-
-    url(r'^results/(?P<pk>\d+)/$',
-        EnquiryDetailView.as_view(),
+    url(r'^(?P<pk>\d+)/$',
+        EnquirySubmitView.as_view(),
         name='enquiry_detail'),
+
+    url(r'^$',
+        ListView.as_view(model=Enquiry),
+        name='enquiry_list'),
 )

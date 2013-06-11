@@ -1,26 +1,9 @@
 {% load i18n %}
 {% load url from future %}
-{% if enquiry_translated %}
-    <form method="post" action="{% url "enquiry_vote" enquiry_pk=enquiry_translated.enquiry.pk %}">
-        {% csrf_token %}
-        {{ enquiry_translated.question }}
-        {% if has_voted %}
-            <ul>
-                {% for answer_translated in enquiry_translated.enquiry.get_answers %}
-                    <li>{{ answer_translated }} {{ answer_translated.answer.get_vote_count }} {% trans "votes" %}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <select name="answer">
-                {% for answery_translated in enquiry_translated.enquiry.get_answers %}
-                    <option value="{{ answery_translated.answer.pk }}">{{ answery_translated }}</option>
-                {% endfor %}
-            </select>
-            {% if request.user.is_authenticated or enquiry_translated.enquiry.allow_anonymous %}
-                <input type="submit" value="{% trans "Post it!" %}" />
-            {% else %}
-                <p>{% trans "Please login to vote." %}</p>
-            {% endif %}
-        {% endif %}
-    </form>
-{% endif %}
+<h2>{{ enquiry.get_translation }}</h2>
+<a href="{% url "enquiry_detail" pk=enquiry.pk %}">{% trans "Vote now!" %}</a>
+<ul>
+    {% for answer_translated in enquiry.get_answers %}
+        <li>{{ answer_translated }} {{ answer_translated.answer.get_vote_count }} {% trans "votes" %}</li>
+    {% endfor %}
+</ul>

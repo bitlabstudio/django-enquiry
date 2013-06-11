@@ -8,12 +8,11 @@ from enquiry.models import Vote
 from enquiry.tests.factories import (
     AnswerTransENFactory,
     EnquiryTransENFactory,
-    VoteFactory,
 )
 
 
-class VoteSubmitViewTestCase(ViewTestMixin, TestCase):
-    """Tests for the ``VoteSubmitView`` view."""
+class EnquirySubmitViewTestCase(ViewTestMixin, TestCase):
+    """Tests for the ``EnquirySubmitView`` view."""
     longMessage = True
 
     def setUp(self):
@@ -24,21 +23,16 @@ class VoteSubmitViewTestCase(ViewTestMixin, TestCase):
         self.enquiry_translated_2 = EnquiryTransENFactory()
 
     def get_view_name(self):
-        return 'enquiry_vote'
+        return 'enquiry_detail'
 
     def get_view_kwargs(self):
-        return {'enquiry_pk': self.enquiry_translated.enquiry.pk}
+        return {'pk': self.enquiry_translated.enquiry.pk}
 
     def test_view(self):
-        # 404: No post data
-        self.is_not_callable()
-
-        # 404: Enquiry not found
-        data = {'answer': 'abc'}
-        self.is_not_callable(method='post', data=data,
-                             kwargs={'enquiry_pk': 999})
+        self.is_callable()
 
         # 404: Not logged in (enquiry disallows anonymous votes)
+        data = {'answer_pk': 'abc'}
         self.is_not_callable(method='post', data=data)
 
         # 404: Posted answer id not int()
@@ -46,13 +40,13 @@ class VoteSubmitViewTestCase(ViewTestMixin, TestCase):
         self.is_not_callable(method='post', data=data)
 
         # 404: Answer not found
-        data.update({'answer': 999})
+        data.update({'answer_pk': 999})
         self.is_not_callable(method='post', data=data)
 
         # 404: Answer doesn't match the enquiry
-        data.update({'answer': self.answer_translated.pk})
+        data.update({'answer_pk': self.answer_translated.pk})
         self.is_not_callable(method='post', data=data, kwargs={
-            'enquiry_pk': self.enquiry_translated_2.pk})
+            'pk': self.enquiry_translated_2.pk})
 
         # 200: Answer matches enquiry
         self.is_callable(method='post', data=data)
@@ -61,47 +55,15 @@ class VoteSubmitViewTestCase(ViewTestMixin, TestCase):
         self.assertEqual(Vote.objects.all()[0].session_key,
                          self.client.session.session_key)
 
-        # 200: Anonymous vote allowed
-        self.enquiry_translated.enquiry.allow_anonymous = True
-        self.enquiry_translated.enquiry.save()
-        self.is_callable(method='post', data=data, anonymous=True)
-        self.assertEqual(Vote.objects.all().count(), 2)
-        self.assertFalse(Vote.objects.all()[1].user)
+        # 200: User can post, but no new vote should be created
+        self.is_callable(method='post', data=data)
+        self.assertEqual(Vote.objects.all().count(), 1)
 
+        # 200: User can still view the enquiry
+        self.is_callable()
 
-class EnquiryDetailViewTestCase(ViewTestMixin, TestCase):
-    """Tests for the ``EnquiryDetailView`` view."""
-    longMessage = True
+        # 404: Should be callable as anonymous
+        self.is_not_callable(method='post', data=data, anonymous=True)
 
-    def setUp(self):
-        self.user = UserFactory()
-        self.answer = AnswerTransENFactory()
-        self.enquiry = EnquiryTransENFactory(
-            enquiry=self.answer.answer.enquiry)
-        self.user_2 = UserFactory()
-
-    def get_view_name(self):
-        return 'enquiry_detail'
-
-    def get_view_kwargs(self):
-        return {'pk': self.enquiry.enquiry.pk}
-
-    def test_view(self):
-        # 404: Anonymous has no votes and anonymous vote is disabled
-        self.is_not_callable()
-
-        # 404: User has no votes
-        self.is_not_callable(user=self.user)
-
-        # 200: User has a vote
-        session_key = self.client.session.session_key
-        VoteFactory(answer=self.answer.answer, user=self.user,
-                    session_key=session_key)
-        self.is_callable(user=self.user)
-
-        self.enquiry.enquiry.allow_anonymous = True
-        self.enquiry.enquiry.save()
-
-        # 404: Anonymous has no vote, cause session_key is lost through logout
-        self.client.logout()
-        self.is_not_callable()
+        # 200: Should be callable as anonymous
+        self.is_callable(data=data, anonymous=True)

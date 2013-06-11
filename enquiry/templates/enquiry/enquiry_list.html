@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block main %}
+<h1>{% trans "Enquiries" %}</h1>
+{% for enquiry in object_list %}
+    <h2>{{ enquiry.get_translation }}</h2>
+    {% if enquiry.is_active %}
+        <a href="{% url "enquiry_detail" pk=enquiry.pk %}">{% trans "Vote now!" %}</a>
+    {% endif %}
+    <ul>
+        {% for answer_translated in enquiry.get_answers %}
+            <li>{{ answer_translated }} {{ answer_translated.answer.get_vote_count }} {% trans "votes" %}</li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+{% endblock %}

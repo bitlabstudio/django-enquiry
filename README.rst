@@ -1,4 +1,4 @@
-Django Enquiry 
+Django Enquiry
 ==============
 
 A reusable Django app to host multilingual polls on your site.
@@ -25,6 +25,13 @@ Add ``enquiry`` to your ``INSTALLED_APPS``::
 Run the South migrations::
 
     ./manage.py migrate enquiry
+
+
+URLs or Apphook
+---------------
+
+You can just add the enquiry urls to your ``urls.py`` or choose the
+apphook in your django-cms page.
 
 
 Templatetags

@@ -91,6 +91,13 @@ class Enquiry(TransModelMixin, models.Model):
             return True
         return False
 
+    def is_active(self):
+        """Returns True if enquiry's campaign is still running."""
+        if (self.start_date < timezone.now()
+                and (not self.end_date or self.end_date > timezone.now())):
+            return True
+        return False
+
 
 class EnquiryTrans(models.Model):
     """

@@ -1,5 +1,6 @@
 """Tests for models of the ``enquiry``` application."""
 from django.test import TestCase
+from django.utils import timezone
 
 from enquiry.tests.factories import (
     AnswerFactory,
@@ -26,6 +27,14 @@ class EnquiryTestCase(TestCase):
         self.assertEqual(self.obj.get_translation().question, 'Eine Frage?')
         EnquiryTransENFactory(enquiry=self.obj)
         self.assertEqual(self.obj.get_translation().question, 'A question?')
+
+    def test_is_active(self):
+        self.assertTrue(self.obj.is_active(), msg=(
+            'Should be True if the campaign is up-to-date.'))
+        upcoming_event = EnquiryFactory(
+            start_date=timezone.now() + timezone.timedelta(days=1))
+        self.assertFalse(upcoming_event.is_active(), msg=(
+            'Should be False if the campaign has not started.'))
 
 
 class AnswerTestCase(TestCase):

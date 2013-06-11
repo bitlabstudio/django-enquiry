@@ -5,7 +5,7 @@ from django.template.context import RequestContext
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from enquiry.templatetags.enquiry_tags import render_current_poll
+from ..templatetags.enquiry_tags import get_current_poll, render_current_poll
 from enquiry.tests.factories import (
     AnswerTransENFactory,
     EnquiryTransENFactory,
@@ -35,5 +35,21 @@ class RenderCurrentPollTestCase(TestCase):
         AnswerTransENFactory(answer=self.vote.answer)
         self.assertEqual(render_current_poll(context), {
             'has_voted': False,
-            'enquiry_translated': enquiry_translated,
+            'enquiry': enquiry_translated.enquiry,
         })
+
+
+class GetCurrentPollTestCase(TestCase):
+    """Tests for the ``get_current_poll`` tag."""
+    longMessage = True
+
+    def test_tag(self):
+        # Returns None if there's no current poll
+        self.assertIsNone(get_current_poll())
+
+        # Returns current tag
+        self.vote = VoteFactory()
+        enquiry_translated = EnquiryTransENFactory(
+            enquiry=self.vote.answer.enquiry)
+        AnswerTransENFactory(answer=self.vote.answer)
+        self.assertEqual(get_current_poll(), enquiry_translated.enquiry)

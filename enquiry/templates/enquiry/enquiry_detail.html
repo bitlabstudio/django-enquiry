@@ -2,10 +2,16 @@
 {% load i18n %}
 
 {% block main %}
-<h1>{{ enquiry_translated }}</h1>
-<ul>
-    {% for answer_translated in enquiry_translated.enquiry.get_answers %}
-        <li>{{ answer_translated }} {{ answer_translated.answer.get_vote_count }} {% trans "votes" %}</li>
-    {% endfor %}
-</ul>
+<h1>{{ enquiry.get_translation.question }}</h1>
+{% if has_voted %}
+    <p>{% trans "You've already posted your vote." %}</p>
+{% endif %}
+<form method="post" action=".">
+    {% csrf_token %}
+    <ul>
+        {% for answer_translated in enquiry.get_answers %}
+            <li>{{ answer_translated }} {{ answer_translated.answer.get_vote_count }} {% trans "votes" %} {% if enquiry.is_active and not has_voted %}<button type="submit" name="answer_pk" value="{{ answer_translated.answer.pk }}">{% trans "Vote!" %}</button>{% endif %}</li>
+        {% endfor %}
+    </ul>
+</form>
 {% endblock %}

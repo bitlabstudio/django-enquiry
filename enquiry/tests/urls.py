@@ -9,7 +9,6 @@ from django.conf.urls.defaults import include, patterns, url
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
 
 
 admin.autodiscover()
@@ -19,6 +18,5 @@ urlpatterns += staticfiles_urlpatterns()
 urlpatterns += patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^enquiries/', include('enquiry.urls')),
-    url(r'^', TemplateView.as_view(template_name='base.html')),
+    url(r'^', include('enquiry.urls')),
 )

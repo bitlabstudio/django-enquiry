@@ -1,5 +1,7 @@
 === ongoing ===
 
+- added apphook and new views
+
 === 0.2.1 ===
 
 - fixed MANIFEST.in
