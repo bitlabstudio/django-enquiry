@@ -1,5 +1,7 @@
 === ongoing ===
 
+=== 0.3.0 ===
+
 - added apphook and new views
 
 === 0.2.1 ===
