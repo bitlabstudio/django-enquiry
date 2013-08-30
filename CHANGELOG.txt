@@ -1,5 +1,8 @@
 === ongoing ===
 
+- Added get_answers assignment tag. This allows to get the answers sorted by
+  vote count
+
 === 0.3.0 ===
 
 - added apphook and new views

@@ -8,6 +8,21 @@ from enquiry.models import Enquiry
 register = template.Library()
 
 
+@register.assignment_tag
+def get_answers(enquiry, sort=False):
+    """
+    Returns the answers of a given enquiry.
+
+    :param enquiry: The given Enquiry instance.
+    :param sort: If true, the answers will be sorted by vote count descending.
+
+    """
+    answers = enquiry.get_answers()
+    if sort:
+        answers.sort(key=lambda a: a.answer.get_vote_count(), reverse=True)
+    return answers
+
+
 @register.inclusion_tag('enquiry/current_poll.html', takes_context=True)
 def render_current_poll(context):
     """Template tag to render one of the current active polls."""
