@@ -1,5 +1,7 @@
 === ongoing ===
 
+=== 0.4 ===
+
 - Added get_answers assignment tag. This allows to get the answers sorted by
   vote count
 
