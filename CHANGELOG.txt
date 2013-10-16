@@ -1,5 +1,7 @@
 === ongoing ===
 
+=== 0.5 ===
+
 - Made created_by field optional
 
 === 0.4 ===
