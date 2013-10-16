@@ -46,6 +46,7 @@ class Enquiry(TransModelMixin, models.Model):
         'auth.User',
         verbose_name=_('Created by'),
         related_name='enquiries',
+        blank=True, null=True,
     )
 
     start_date = models.DateTimeField(

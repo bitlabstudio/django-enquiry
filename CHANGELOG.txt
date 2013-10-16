@@ -1,5 +1,7 @@
 === ongoing ===
 
+- Made created_by field optional
+
 === 0.4 ===
 
 - Added get_answers assignment tag. This allows to get the answers sorted by
