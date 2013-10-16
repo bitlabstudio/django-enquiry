@@ -65,6 +65,11 @@ class Enquiry(TransModelMixin, models.Model):
         verbose_name=_('Allow anonymous votes'),
     )
 
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name=('Is published'),
+    )
+
     def __unicode__(self):
         translation = self.get_translation()
         if translation:

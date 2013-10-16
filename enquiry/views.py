@@ -1,9 +1,16 @@
 """Views for the ``event_rsvp`` app."""
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 
 from .models import Answer, Enquiry, Vote
+
+
+class EnquiryListView(ListView):
+    """List view for the Enquiry model."""
+
+    def get_queryset(self):
+        return Enquiry.objects.filter(is_published=True)
 
 
 class EnquirySubmitView(DetailView):
