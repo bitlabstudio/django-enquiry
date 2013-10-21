@@ -27,6 +27,7 @@ def get_answers(enquiry, sort=False):
 def render_current_poll(context):
     """Template tag to render one of the current active polls."""
     enquiries = Enquiry.objects.filter(
+        Q(is_published=True),
         Q(start_date__lt=now()),
         Q(end_date__gt=now()) | Q(end_date__isnull=True))
     if enquiries:
@@ -41,6 +42,7 @@ def render_current_poll(context):
 def get_current_poll():
     """Returns the current active poll."""
     enquiries = Enquiry.objects.filter(
+        Q(is_published=True),
         Q(start_date__lt=now()),
         Q(end_date__gt=now()) | Q(end_date__isnull=True))
     if enquiries:

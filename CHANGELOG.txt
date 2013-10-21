@@ -1,5 +1,7 @@
 === ongoing ===
 
+- templatetags now honour is_published field
+
 === 0.6 ===
 
 - Added is_published field. Only showing published enquiries on the ListView

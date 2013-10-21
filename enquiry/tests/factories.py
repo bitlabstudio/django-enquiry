@@ -16,6 +16,7 @@ class EnquiryFactory(factory.Factory):
         lambda a: timezone.now() - timezone.timedelta(days=1))
     end_date = factory.LazyAttribute(
         lambda a: timezone.now() + timezone.timedelta(days=7))
+    is_published = True
 
 
 class EnquiryTransFactoryBase(factory.Factory):
