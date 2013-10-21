@@ -1,5 +1,7 @@
 === ongoing ===
 
+=== 0.7 ===
+
 - templatetags now honour is_published field
 
 === 0.6 ===
