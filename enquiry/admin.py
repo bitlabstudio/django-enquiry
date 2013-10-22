@@ -11,7 +11,11 @@ class AnswerAdmin(TranslationAdmin):
 
 
 class EnquiryAdmin(TranslationAdmin):
-    pass
+    list_display = [
+        'question', 'start_date', 'end_date', 'is_published', 'languages', ]
+
+    def question(self, obj):
+       return obj.get_translation().question
 
 
 admin.site.register(Answer, AnswerAdmin)
