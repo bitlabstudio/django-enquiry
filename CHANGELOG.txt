@@ -1,5 +1,7 @@
 === ongoing ===
 
+- Added ordering for start_date for Enquiry model to class Meta
+
 === 0.7 ===
 
 - templatetags now honour is_published field

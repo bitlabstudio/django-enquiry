@@ -70,6 +70,9 @@ class Enquiry(TransModelMixin, models.Model):
         verbose_name=('Is published'),
     )
 
+    class Meta:
+        ordering = ('-start_date', )
+
     def __unicode__(self):
         translation = self.get_translation()
         if translation:
