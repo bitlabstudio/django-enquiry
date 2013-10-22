@@ -1,5 +1,7 @@
 === ongoing ===
 
+=== 0.7.2 ===
+
 - Improved Enquiry admin
 
 === 0.7.1 ===
