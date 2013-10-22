@@ -1,5 +1,7 @@
 === ongoing ===
 
+=== 0.7.1 ===
+
 - Added ordering for start_date for Enquiry model to class Meta
 
 === 0.7 ===
