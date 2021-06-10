@@ -3,7 +3,7 @@
 # ===========================================================================
 # Packages essential to this app. Needed by anyone who wants to use this app.
 # ===========================================================================
-Django==1.4.3
+Django==2.2.24
 South==0.7.6
 simple-translation==0.8.6
 
